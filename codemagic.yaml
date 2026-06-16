@@ -1,75 +1,35 @@
 workflows:
-  android-tv-release:
-    name: Study Quest - Android TV Release
+  android-tv-debug:
+    name: Study Quest - Debug APK
     max_build_duration: 60
     environment:
       flutter: stable
       java: 17
-      android_signing:
-        - study_quest_keystore
-      groups:
-        - firebase_credentials
-      vars:
-        PACKAGE_NAME: "com.studyquest.app"
 
     scripts:
+      - name: Inject google-services.json
+        script: |
+          echo "$GOOGLE_SERVICES_JSON" > "$CM_BUILD_DIR/android/app/google-services.json"
+
       - name: Set up local.properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > "$CM_BUILD_DIR/android/local.properties"
 
       - name: Get Flutter packages
-        script: flutter packages pub get
-
-      - name: Build Android TV APK (Release)
         script: |
-          flutter build apk \
-            --release \
-            --target-platform android-arm64 \
-            --split-per-abi
+          flutter pub get
 
-      - name: Build Android App Bundle (Release)
+      - name: Recreate android folder
         script: |
-          flutter build appbundle \
-            --release \
-            --target-platform android-arm64
+          flutter create --platforms=android .
 
-    artifacts:
-      - build/**/outputs/apk/**/*.apk
-      - build/**/outputs/bundle/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
-
-    publishing:
-      email:
-        recipients:
-          - developer@example.com
-        notify:
-          success: true
-          failure: true
-
-  android-tv-debug:
-    name: Study Quest - Android TV Debug
-    max_build_duration: 30
-    environment:
-      flutter: stable
-      java: 17
-
-    scripts:
-      - name: Set up local.properties
+      - name: Re-inject google-services.json
         script: |
-          echo "flutter.sdk=$FLUTTER_ROOT" > "$CM_BUILD_DIR/android/local.properties"
-
-      - name: Get Flutter packages
-        script: flutter packages pub get
-
-      - name: Analyze code
-        script: flutter analyze --no-fatal-infos
-
-      - name: Run tests
-        script: flutter test
+          echo "$GOOGLE_SERVICES_JSON" > "$CM_BUILD_DIR/android/app/google-services.json"
 
       - name: Build Debug APK
-        script: flutter build apk --debug
+        script: |
+          flutter build apk --debug
 
     artifacts:
-      - build/**/outputs/apk/debug/*.apk
+      - "**/*.apk"

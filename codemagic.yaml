@@ -19,17 +19,13 @@ workflows:
         script: |
           flutter pub get
 
-      - name: Recreate android folder
+      - name: Generate Android files
         script: |
-          flutter create --platforms=android .
-
-      - name: Re-inject google-services.json
-        script: |
-          echo "$GOOGLE_SERVICES_JSON" > "$CM_BUILD_DIR/android/app/google-services.json"
+          flutter build apk --config-only
 
       - name: Build Debug APK
         script: |
-          flutter build apk --debug
+          flutter build apk --debug --verbose
 
     artifacts:
       - "**/*.apk"

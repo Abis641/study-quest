@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    TV Banner: Replace this with a real 320x180 PNG file at:
+    android/app/src/main/res/drawable/tv_banner.png
+
+    This XML is just a placeholder so the build doesn't fail.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="#6C63FF"
+        android:endColor="#9D50BB"
+        android:angle="45" />
+</shape>

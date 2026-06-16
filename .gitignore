@@ -1,0 +1,43 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.g.dart
+*.freezed.dart
+
+# Android
+android/app/google-services.json
+android/key.properties
+android/*.jks
+android/*.keystore
+*.keystore
+*.jks
+
+# Firebase
+firebase_options.dart.local
+.firebaserc
+firebase-debug.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# Misc
+*.log
+*.lock
+coverage/
+doc/api/
+
+# Build outputs
+/build/
+*.apk
+*.aab
+*.ipa

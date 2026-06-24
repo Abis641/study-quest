@@ -65,9 +65,8 @@ class AchievementsScreen extends ConsumerWidget {
                   ),
                   const Spacer(),
                   if (user != null)
-                    UserAvatar(
+                   UserAvatar(
                       networkUrl: user.avatarUrl,
-                      localAvatarPath: user.localAvatarPath,
                       size: 64,
                       name: user.name,
                     ),

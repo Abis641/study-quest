@@ -5,27 +5,30 @@ workflows:
     environment:
       flutter: stable
       java: 17
+      groups:
+        - A
 
     scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+
+      - name: Recreate android folder
+        script: |
+          flutter create --platforms=android .
+
       - name: Inject google-services.json
         script: |
+          mkdir -p "$CM_BUILD_DIR/android/app"
           echo "$GOOGLE_SERVICES_JSON" > "$CM_BUILD_DIR/android/app/google-services.json"
 
       - name: Set up local.properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > "$CM_BUILD_DIR/android/local.properties"
 
-      - name: Get Flutter packages
-        script: |
-          flutter pub get
-
-      - name: Generate Android files
-        script: |
-          flutter build apk --config-only
-
       - name: Build Debug APK
         script: |
-          flutter build apk --debug --verbose
+          flutter build apk --debug
 
     artifacts:
       - "**/*.apk"

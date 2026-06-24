@@ -121,11 +121,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Row(
         children: [
           UserAvatar(
-            networkUrl: user.avatarUrl,
-            localAvatarPath: user.localAvatarPath,
-            size: TVSizes.avatarSize,
-            name: user.name,
-          ),
+                networkUrl: user.avatarUrl,
+                size: TVSizes.avatarSize,
+                name: user.name,
+              ),
           const SizedBox(width: 20),
           Expanded(
             child: Column(

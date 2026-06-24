@@ -141,11 +141,11 @@ class AppTheme {
           onSurface: textPrimary,
         ),
         textTheme: textTheme,
-        cardTheme: CardTheme(
+        cardTheme: const CardTheme(
           color: cardBase,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(

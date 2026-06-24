@@ -42,40 +42,36 @@ class UserAvatar extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    // 1. Try network URL
     if (networkUrl != null && networkUrl!.isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: networkUrl!,
         fit: BoxFit.cover,
-        placeholder: (_, __) => _buildInitials(),
-        errorWidget: (_, __, ___) =>
+        placeholder: (context, url) => _buildInitials(),
+        errorWidget: (context, url, error) =>
             localAssetPath != null ? _buildLocalAsset() : _buildInitials(),
       );
     }
 
-    // 2. Try local asset path (parent-placed photo)
     if (localAssetPath != null && localAssetPath!.isNotEmpty) {
       return _buildLocalAsset();
     }
 
-    // 3. Fallback to initials avatar
     return _buildInitials();
   }
 
   Widget _buildLocalAsset() {
-    // Check if it's a file path or flutter asset
     if (localAssetPath!.startsWith('/')) {
       final file = File(localAssetPath!);
       return Image.file(
         file,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _buildInitials(),
+        errorBuilder: (context, error, stackTrace) => _buildInitials(),
       );
     }
     return Image.asset(
       localAssetPath!,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => _buildInitials(),
+      errorBuilder: (context, error, stackTrace) => _buildInitials(),
     );
   }
 

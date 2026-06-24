@@ -190,9 +190,8 @@ class _ProfileHeader extends ConsumerWidget {
           const SizedBox(width: 24),
           Stack(
             children: [
-              UserAvatar(
+             UserAvatar(
                 networkUrl: user.avatarUrl,
-                localAvatarPath: user.localAvatarPath,
                 size: 100,
                 name: user.name,
               ),

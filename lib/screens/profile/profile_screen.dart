@@ -137,7 +137,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _ProfileHeader extends ConsumerWidget {
+class _ProfileHeader extends StatelessWidget {
   final dynamic user;
   final WidgetRef ref;
 

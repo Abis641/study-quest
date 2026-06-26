@@ -1,15 +1,12 @@
 // lib/screens/profile/profile_screen.dart
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
 import '../../models/lesson_model.dart';
 import '../../providers/user_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/user_service.dart';
-import '../../services/storage_service.dart';
 import '../../widgets/user_avatar.dart';
 import '../../widgets/stats_bar.dart';
 import '../../widgets/tv_focusable_card.dart';
@@ -24,31 +21,26 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: userAsync.when(
-        loading: () =>
-            const Center(child: CircularProgressIndicator(color: AppTheme.primary)),
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: AppTheme.primary)),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (user) {
           if (user == null) {
             return const Center(child: Text('No profile found'));
           }
-
           return Container(
             decoration:
                 const BoxDecoration(gradient: AppTheme.backgroundGradient),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Profile header
                   _ProfileHeader(user: user, ref: ref),
-
                   Padding(
                     padding: const EdgeInsets.all(40),
                     child: Column(
                       children: [
                         StatsBar(user: user),
                         const SizedBox(height: 32),
-
-                        // Subject progress
                         Text(
                           'Subject Progress',
                           style: Theme.of(context).textTheme.headlineMedium,
@@ -70,10 +62,7 @@ class ProfileScreen extends ConsumerWidget {
                             );
                           }).toList(),
                         ),
-
                         const SizedBox(height: 32),
-
-                        // Info cards
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -82,7 +71,9 @@ class ProfileScreen extends ConsumerWidget {
                                 title: 'About Me',
                                 items: [
                                   _InfoItem(
-                                      icon: '👤', label: 'Name', value: user.name),
+                                      icon: '👤',
+                                      label: 'Name',
+                                      value: user.name),
                                   _InfoItem(
                                       icon: '🎂',
                                       label: 'Age',
@@ -110,7 +101,8 @@ class ProfileScreen extends ConsumerWidget {
                                   _InfoItem(
                                       icon: '✨',
                                       label: 'Total XP',
-                                      value: '${user.xp} / ${user.xpForNextLevel}'),
+                                      value:
+                                          '${user.xp} / ${user.xpForNextLevel}'),
                                   _InfoItem(
                                       icon: '🔥',
                                       label: 'Best Streak',
@@ -144,33 +136,12 @@ class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({required this.user, required this.ref});
 
   Future<void> _pickImage(BuildContext context) async {
-    try {
-      final picker = ImagePicker();
-      final picked = await picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 80,
-        maxWidth: 400,
-      );
-      if (picked == null) return;
-
-      final uid = ref.read(currentUserIdProvider);
-      if (uid == null) return;
-
-      final file = File(picked.path);
-      final storageService = ref.read(storageServiceProvider);
-      final userService = ref.read(userServiceProvider);
-
-      final url = await storageService.uploadProfileImage(uid, file);
-      if (url != null) {
-        await userService.updateUser(uid, {'avatarUrl': url});
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not update photo')),
-        );
-      }
-    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Photo upload coming soon!'),
+        backgroundColor: AppTheme.primary,
+      ),
+    );
   }
 
   @override
@@ -190,7 +161,7 @@ class _ProfileHeader extends StatelessWidget {
           const SizedBox(width: 24),
           Stack(
             children: [
-             UserAvatar(
+              UserAvatar(
                 networkUrl: user.avatarUrl,
                 size: 100,
                 name: user.name,
@@ -235,9 +206,12 @@ class _ProfileHeader extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  _HeaderBadge(emoji: '🔥', label: '${user.currentStreak}d streak'),
+                  _HeaderBadge(
+                      emoji: '🔥',
+                      label: '${user.currentStreak}d streak'),
                   const SizedBox(width: 8),
-                  _HeaderBadge(emoji: '⭐', label: '${user.stars} stars'),
+                  _HeaderBadge(
+                      emoji: '⭐', label: '${user.stars} stars'),
                 ],
               ),
             ],
@@ -265,7 +239,9 @@ class _HeaderBadge extends StatelessWidget {
       child: Text(
         '$emoji $label',
         style: const TextStyle(
-            color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+            color: Colors.white,
+            fontSize: 13,
+            fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -300,8 +276,8 @@ class _SubjectProgressCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           progressAsync.when(
-            loading: () =>
-                const SizedBox(height: 6, child: LinearProgressIndicator()),
+            loading: () => const SizedBox(
+                height: 6, child: LinearProgressIndicator()),
             error: (_, __) => const SizedBox.shrink(),
             data: (progress) {
               final xp = progress?.totalXpEarned ?? 0;
@@ -362,7 +338,8 @@ class _InfoCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
                   children: [
-                    Text(item.icon, style: const TextStyle(fontSize: 18)),
+                    Text(item.icon,
+                        style: const TextStyle(fontSize: 18)),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -370,7 +347,8 @@ class _InfoCard extends StatelessWidget {
                         Text(
                           item.label,
                           style: const TextStyle(
-                              color: AppTheme.textMuted, fontSize: 11),
+                              color: AppTheme.textMuted,
+                              fontSize: 11),
                         ),
                         Text(
                           item.value,

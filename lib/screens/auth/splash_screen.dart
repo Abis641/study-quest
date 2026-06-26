@@ -1,4 +1,3 @@
-// lib/screens/auth/splash_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../config/app_theme.dart';
 import '../../config/app_router.dart';
 import '../../providers/auth_provider.dart';
-import '../../services/lesson_service.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -19,17 +17,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _initialize();
+    _navigate();
   }
 
-  Future<void> _initialize() async {
-    // Seed data and check auth
+  Future<void> _navigate() async {
+    // Short delay just for splash animation
     await Future.delayed(const Duration(seconds: 2));
-
-    try {
-      await ref.read(lessonServiceProvider).seedSampleData();
-    } catch (_) {}
-
     if (!mounted) return;
 
     final user = ref.read(authStateProvider).value;
@@ -45,12 +38,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppTheme.backgroundGradient),
+        decoration: const BoxDecoration(
+          gradient: AppTheme.backgroundGradient,
+        ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo
               Container(
                 width: 140,
                 height: 140,
@@ -98,19 +92,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                       color: AppTheme.primary,
                       letterSpacing: 1,
                     ),
-              )
-                  .animate()
-                  .fadeIn(delay: 600.ms, duration: 500.ms),
+              ).animate().fadeIn(delay: 600.ms, duration: 500.ms),
 
               const SizedBox(height: 60),
 
-              SizedBox(
-                width: 48,
-                height: 48,
-                child: CircularProgressIndicator(
-                  color: AppTheme.primary,
-                  strokeWidth: 3,
-                ),
+              const CircularProgressIndicator(
+                color: AppTheme.primary,
+                strokeWidth: 3,
               ).animate().fadeIn(delay: 800.ms),
             ],
           ),

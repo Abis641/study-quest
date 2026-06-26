@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'config/app_theme.dart';
 import 'config/app_router.dart';
 import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +19,14 @@ void main() async {
     SystemUiMode.immersiveSticky,
   );
 
-  try {
+ try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // Enable offline persistence for faster loading
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
   } catch (e) {
     debugPrint('Firebase init error: $e');
